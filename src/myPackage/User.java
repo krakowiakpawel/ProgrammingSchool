@@ -21,6 +21,7 @@ public class User {
 
 	public User(int user_group_id, String username, String email, String password) {
 		super();
+		this.id = 0;
 		this.user_group_id = user_group_id;
 		this.username = username;
 		this.email = email;
@@ -107,8 +108,8 @@ public class User {
 		try (Connection conn = DbManager.getConnection()) {
 
 			// Sprawdzić wielkości liter w querry
-			String querry = "SELECT * FROM Users  where user_group_id= ?"; // JOIN Group ON
-																				// Users.user_group_id=Group.Id
+			//String  = "SELECT * FROM Users  where user_group_id= ?";OIN Group ON OLD
+			String querry = "SELECT * FROM Users JOIN User_group ON Users.user_group_id = user_group_id WHERE user_group_id = ?";
 			PreparedStatement stmt = conn.prepareStatement(querry);
 			stmt.setInt(1, id);
 			return getUsersFromStatement(stmt, querry);
