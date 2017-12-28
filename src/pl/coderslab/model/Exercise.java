@@ -1,9 +1,11 @@
-package myPackage;
+package pl.coderslab.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+
+import sql.DbManager;
 
 public class Exercise {
 
@@ -31,6 +33,10 @@ public class Exercise {
 		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
 		return "Exercise [id=" + id + ", title=" + title + ", description=" + description + "]";
@@ -45,7 +51,7 @@ public class Exercise {
 	public Exercise() {
 	}
 
-	public static ArrayList<Exercise> getExerciseFromStatement(PreparedStatement stmt, String querry) {
+	public static ArrayList<Exercise> getExerciseFromStatement(PreparedStatement stmt) {
 		try {
 			ArrayList<Exercise> Exercises = new ArrayList<>();
 			ResultSet rs = stmt.executeQuery();
@@ -70,21 +76,12 @@ public class Exercise {
 			String querry = "SELECT * FROM Exercise WHERE ID = ?";
 			PreparedStatement stmt = conn.prepareStatement(querry);
 			stmt.setInt(1, id);
-			ResultSet rs = stmt.executeQuery();
+			return getExerciseFromStatement(stmt).get(0);
 
-			while (rs.next()) {
-				Exercise ex = new Exercise();
-
-				ex.id = rs.getInt("id");
-				ex.title = rs.getString("title");
-				ex.description = rs.getString("description");
-				return ex;
-
-			}
 		} catch (Exception e) {
-			e.printStackTrace();
+
+			return null;
 		}
-		return null;
 	}
 
 	public static ArrayList<Exercise> loadAllByUserId(int userId) {
@@ -93,7 +90,7 @@ public class Exercise {
 
 			PreparedStatement stmt = conn.prepareStatement(querry);
 			stmt.setInt(1, userId);
-			return getExerciseFromStatement(stmt, querry);
+			return getExerciseFromStatement(stmt);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,7 +104,7 @@ public class Exercise {
 		try (Connection conn = DbManager.getConnection()) {
 			String querry = "SELECT * FROM Exercise";
 			PreparedStatement stmt = conn.prepareStatement(querry);
-			return getExerciseFromStatement(stmt, querry);
+			return getExerciseFromStatement(stmt);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -125,6 +122,18 @@ public class Exercise {
 				PreparedStatement stmt = DbManager.getPreparedStatement(querry, generatedColumns);
 				stmt.setString(1, this.title);
 				stmt.setString(2, this.description);
+				stmt.executeUpdate();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			try (Connection conn = DbManager.getConnection()) {
+				String querry = "UPDATE Exercise SET title = ?, description = ? WHERE id = ?";
+				PreparedStatement stmt = conn.prepareStatement(querry);
+				stmt.setString(1, this.title);
+				stmt.setString(2, this.description);
+				stmt.setInt(3, id);
 				stmt.executeUpdate();
 
 			} catch (Exception e) {

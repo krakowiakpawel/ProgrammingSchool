@@ -1,4 +1,4 @@
-package myPackage;
+package pl.coderslab.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import org.mindrot.jbcrypt.BCrypt;
+
+import sql.DbManager;
 
 public class User {
 
@@ -30,7 +32,8 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "id: " + this.id + " username: " + this.username + " email:" + this.email + " password:" + this.password;
+		return "id: " + this.id + " username: " + this.username + " email:" + this.email + " password:" + this.password
+				+ " salt: " + this.salt;
 	}
 
 	public void setPassword(String password) {
@@ -55,11 +58,11 @@ public class User {
 		this.email = email;
 	}
 
-	public int getPerson_group_id() {
+	public int getuser_group_id() {
 		return user_group_id;
 	}
 
-	public void setPerson_group_id(int user_group_id) {
+	public void setuser_group_id(int user_group_id) {
 		this.user_group_id = user_group_id;
 	}
 
@@ -67,12 +70,15 @@ public class User {
 		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
 	public static ArrayList<User> loadAll() {
 
 		try (Connection conn = DbManager.getConnection()) {
 			String querry = "SELECT * FROM Users";
 			PreparedStatement stmt = conn.prepareStatement(querry);
-			return getUsersFromStatement(stmt, querry);
+			return getUsersFromStatement(stmt);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,7 +87,7 @@ public class User {
 
 	}
 
-	public static ArrayList<User> getUsersFromStatement(PreparedStatement stmt, String querry) {
+	public static ArrayList<User> getUsersFromStatement(PreparedStatement stmt) {
 		try {
 			ArrayList<User> users = new ArrayList<>();
 			ResultSet rs = stmt.executeQuery();
@@ -108,11 +114,11 @@ public class User {
 		try (Connection conn = DbManager.getConnection()) {
 
 			// Sprawdzić wielkości liter w querry
-			//String  = "SELECT * FROM Users  where user_group_id= ?";OIN Group ON OLD
+			// String = "SELECT * FROM Users where user_group_id= ?";OIN Group ON OLD
 			String querry = "SELECT * FROM Users JOIN User_group ON Users.user_group_id = user_group_id WHERE user_group_id = ?";
 			PreparedStatement stmt = conn.prepareStatement(querry);
 			stmt.setInt(1, id);
-			return getUsersFromStatement(stmt, querry);
+			return getUsersFromStatement(stmt);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -125,22 +131,13 @@ public class User {
 			String querry = "SELECT * FROM Users WHERE ID = ?";
 			PreparedStatement stmt = conn.prepareStatement(querry);
 			stmt.setInt(1, id);
-			ResultSet rs = stmt.executeQuery();
 
-			while (rs.next()) {
-				User loadedUser = new User();
-				loadedUser.id = rs.getInt("id");
-				loadedUser.email = rs.getString("email");
-				loadedUser.user_group_id = rs.getInt("user_group_id");
-				loadedUser.username = rs.getString("username");
-				loadedUser.password = rs.getString("password");
-				loadedUser.salt = rs.getString("salt");
-				return loadedUser;
-			}
+			return getUsersFromStatement(stmt).get(0);
+
 		} catch (Exception e) {
-			e.printStackTrace();
+
+			return null;
 		}
-		return null;
 	}
 
 	public void saveToDB() {
@@ -160,6 +157,21 @@ public class User {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		} else {
+			try (Connection conn = DbManager.getConnection()) {
+				String querry = "UPDATE Users SET username = ? , email = ? , user_group_id = ?  WHERE id = ?";
+
+				PreparedStatement stmt = conn.prepareStatement(querry);
+				stmt.setString(1, this.username);
+				stmt.setString(2, this.email);
+				stmt.setInt(3, this.user_group_id);  // Czy z solą na pewno? Tak? Mogą się generować problemy
+				stmt.setInt(4, this.id);
+				stmt.executeUpdate();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 
 	}
@@ -178,5 +190,4 @@ public class User {
 			e.printStackTrace();
 		}
 	}
-
 }

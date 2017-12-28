@@ -1,11 +1,13 @@
-package myPackage;
+package pl.coderslab.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class UserGroup {
+import sql.DbManager;
+
+public class Group {
 
 	private int id;
 	private String name;
@@ -22,12 +24,16 @@ public class UserGroup {
 		return id;
 	}
 
-	public UserGroup(String name) {
+	public Group(String name) {
 		this.id = 0;
 		this.name = name;
 	}
 
-	public UserGroup() {
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public Group() {
 	}
 
 	@Override
@@ -37,13 +43,13 @@ public class UserGroup {
 
 	}
 
-	public static ArrayList<UserGroup> getUserGroupsFromStatement(PreparedStatement stmt, String querry) {
+	public static ArrayList<Group> getUserGroupsFromStatement(PreparedStatement stmt) {
 		try {
-			ArrayList<UserGroup> userGroups = new ArrayList<>();
+			ArrayList<Group> userGroups = new ArrayList<>();
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				UserGroup myUserGroup = new UserGroup();
+				Group myUserGroup = new Group();
 
 				myUserGroup.id = rs.getInt("id");
 				myUserGroup.name = rs.getString("name");
@@ -57,12 +63,12 @@ public class UserGroup {
 		}
 	}
 
-	public static ArrayList<UserGroup> loadAll() {
+	public static ArrayList<Group> loadAll() {
 
 		try (Connection conn = DbManager.getConnection()) {
 			String querry = "SELECT * FROM User_group";
 			PreparedStatement stmt = conn.prepareStatement(querry);
-			return getUserGroupsFromStatement(stmt, querry);
+			return getUserGroupsFromStatement(stmt);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -71,42 +77,34 @@ public class UserGroup {
 
 	}
 
-//	public static ArrayList<UserGroup> loadAllByGroupId(int id) {
-//
-//		try (Connection conn = DbManager.getConnection()) {
-//
-//			// Sprawdzić wielkości liter w querry
-//			String querry = "SELECT * FROM User_group  where user_group_id= ?"; // JOIN Group ON
-//			// Users.user_group_id=Group.Id
-//			PreparedStatement stmt = conn.prepareStatement(querry);
-//			stmt.setInt(1, id);
-//			return getUserGroupsFromStatement(stmt, querry);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//
-//	}
+	// public static ArrayList<Group> loadAllByGroupId(int id) {
+	//
+	// try (Connection conn = DbManager.getConnection()) {
+	//
+	// // Sprawdzić wielkości liter w querry
+	// String querry = "SELECT * FROM User_group where user_group_id= ?"; // JOIN
+	// Group ON
+	// // Users.user_group_id=Group.Id
+	// PreparedStatement stmt = conn.prepareStatement(querry);
+	// stmt.setInt(1, id);
+	// return getUserGroupsFromStatement(stmt, querry);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// return null;
+	// }
+	//
+	// }
 
-	public static UserGroup loadById(int id) {
+	public static Group loadById(int id) {
 		try (Connection conn = DbManager.getConnection()) {
 			String querry = "SELECT * FROM User_group WHERE ID = ?";
 			PreparedStatement stmt = conn.prepareStatement(querry);
 			stmt.setInt(1, id);
-			ResultSet rs = stmt.executeQuery();
+			return getUserGroupsFromStatement(stmt).get(0);
 
-			while (rs.next()) {
-				UserGroup myUserGroup = new UserGroup();
-
-				myUserGroup.id = rs.getInt("id");
-				myUserGroup.name = rs.getString("name");
-				return myUserGroup;
-
-			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
 	public void saveToDB() {
@@ -119,6 +117,16 @@ public class UserGroup {
 				stmt.setString(1, this.name);
 				stmt.executeUpdate();
 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			try (Connection conn = DbManager.getConnection()) {
+				String querry = "UPDATE User_group SET name = ? WHERE id = ?";
+				PreparedStatement stmt = conn.prepareStatement(querry);
+				stmt.setString(1, this.name);
+				stmt.setInt(2, id);
+				stmt.executeUpdate();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

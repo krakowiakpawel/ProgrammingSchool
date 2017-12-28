@@ -1,4 +1,4 @@
-package myPackage;
+package pl.coderslab.model;
 
 import java.util.List;
 
@@ -7,29 +7,35 @@ public class Test {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		// User testUser = new User(3, "Jarosła", "jaroslaw@gmail.com", "pass");
+		// UserLoadAll testUser = new UserLoadAll(3, "Jarosła", "jaroslaw@gmail.com", "pass");
 
 		// testUser.saveToDB();
 
-		// new User(person_group_id, username, email, password)
+		// new UserLoadAll(person_group_id, username, email, password)
 
 		// testUser.delete();
 
-		 List<User> testList = User.loadAllByGroupId(1);
+		 List<Solution> testList = Solution.loadAll(0);
 		 System.out.println(testList);
-		// User test = User.loadById(1);
-		// System.out.println(test.toString());
+//		UserLoadAll test = UserLoadAll.loadById(114);
+//		System.out.println(test);
+//		if (test != null) {
+//		System.out.println(test.toString());
+//		} else {
+//			System.out.println("Pusto, null");
+//		}
+		
 		// test.delete();
 
 		// Test ------------------------UserGropup------------------------
 		// --------1------------
-		// UserGroup uG = new UserGroup ("php");
+		// Group uG = new Group ("php");
 		// uG.saveToDB(); -- OK!
 		// --------2------------
-		// List <UserGroup> uList = UserGroup.loadAllByGroupId(1);
+		// List <Group> uList = Group.loadAllByGroupId(1);
 		// System.out.println(uList); // -- OK!
 		// --------3------------
-		// UserGroup uG = UserGroup.loadById(2);
+		// Group uG = Group.loadById(2);
 		// System.out.println(uG); //-- OK!
 		// --------4------------
 		// uG.delete();
@@ -43,13 +49,13 @@ public class Test {
 		// List <Exercise> eList = Exercise.loadAll();
 		// System.out.println(eList); //-- OK!
 		// --------3------------
-		// Exercise ex = Exercise.loadById(4);
-		// System.out.println(ex); // -- OK!
+//		 Exercise ex = Exercise.loadById(4);
+//		 System.out.println(ex); // -- OK!
 		// --------4------------
 		// ex.delete();
 		// System.out.println("OK");// -- OK!
 		// --------5------------
-//		List <Exercise> eList = Exercise.loadAllByUserId(2);
-//		System.out.println(eList);
+		// List <Exercise> eList = Exercise.loadAllByUserId(2);
+		// System.out.println(eList);
 	}
 }
