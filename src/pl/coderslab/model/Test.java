@@ -15,8 +15,8 @@ public class Test {
 
 		// testUser.delete();
 
-		 List<Solution> testList = Solution.loadAll(0);
-		 System.out.println(testList);
+	//	 List<Solution> testList = Solution.loadAll(0);
+	//	 System.out.println(testList);
 //		UserLoadAll test = UserLoadAll.loadById(114);
 //		System.out.println(test);
 //		if (test != null) {
@@ -32,8 +32,8 @@ public class Test {
 		// Group uG = new Group ("php");
 		// uG.saveToDB(); -- OK!
 		// --------2------------
-		// List <Group> uList = Group.loadAllByGroupId(1);
-		// System.out.println(uList); // -- OK!
+		 List <User> uList = User.loadAllByGroupId(1);
+		 System.out.println(uList); // -- OK!
 		// --------3------------
 		// Group uG = Group.loadById(2);
 		// System.out.println(uG); //-- OK!

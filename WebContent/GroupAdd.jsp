@@ -8,7 +8,11 @@
 	</head>
 	<body>
 		<jsp:include page="Header.jsp" />
-		<h1>Witaj w panelu Administratora</h1>
+		<form action='GroupAdd' method='POST'>
+			<label> GroupName <input type='text' name='GroupName'></label> 
+			<br/> 
+			<input type='submit'> <input type="reset">
+		</form>
 		<jsp:include page="Footer.jsp" />
 	</body>
 </html>

@@ -115,7 +115,7 @@ public class User {
 
 			// Sprawdzić wielkości liter w querry
 			// String = "SELECT * FROM Users where user_group_id= ?";OIN Group ON OLD
-			String querry = "SELECT * FROM Users JOIN User_group ON Users.user_group_id = user_group_id WHERE user_group_id = ?";
+			String querry = "SELECT * FROM Users  WHERE user_group_id = ?"; //JOIN User_group ON Users.user_group_id = user_group_id
 			PreparedStatement stmt = conn.prepareStatement(querry);
 			stmt.setInt(1, id);
 			return getUsersFromStatement(stmt);

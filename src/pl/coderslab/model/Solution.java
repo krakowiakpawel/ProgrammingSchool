@@ -1,35 +1,35 @@
 package pl.coderslab.model;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import sql.DbManager;
 
 public class Solution {
 	int id;
-	private Date created;
-	private Date updated;
+	private Timestamp created;
+	private Timestamp updated;
 	private String description;
 	private int exercise_id;
 	private int user_id;
 
-	public Date getCreated() {
+	public Timestamp getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	public void setCreated(Timestamp created) {
 		this.created = created;
 	}
 
-	public Date getUpdated() {
+	public Timestamp getUpdated() {
 		return updated;
 	}
 
-	public void setUpdated(Date updated) {
+	public void setUpdated(Timestamp updated) {
 		this.updated = updated;
 	}
 
@@ -185,8 +185,8 @@ public class Solution {
 				Solution mySolution = new Solution();
 
 				mySolution.id = rs.getInt("id");
-				mySolution.created = rs.getDate("created");
-				mySolution.updated = rs.getDate("updated");
+				mySolution.created = rs.getTimestamp("created");
+				mySolution.updated = rs.getTimestamp("updated");
 				mySolution.description = rs.getString("description");
 				mySolution.exercise_id = rs.getInt("exercise_id");
 				mySolution.user_id = rs.getInt("user_id");
@@ -224,12 +224,12 @@ public class Solution {
 		}
 	}
 
-	public static ArrayList<Solution> loadSolutionById(int id) {
+	public static Solution loadSolutionById(int id) {
 		try (Connection conn = DbManager.getConnection()) {
 			String querry = "SELECT * FROM Solution WHERE ID = ?";
 			PreparedStatement stmt = conn.prepareStatement(querry);
 			stmt.setInt(1, id);
-			return getSolutionsFromStatement(stmt);
+			return getSolutionsFromStatement(stmt).get(0);
 
 		} catch (
 

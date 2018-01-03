@@ -4,11 +4,15 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Insert title here</title>
+		<title>404 - Not Found</title>
 	</head>
+	
 	<body>
 		<jsp:include page="Header.jsp" />
-		<h1>Witaj w panelu Administratora</h1>
+			<a href="/ProgrammingSchool"> 
+				<img src='https://s3.envato.com/files/169113637/404.jpg' height="600" width="850">
+			</a>
 		<jsp:include page="Footer.jsp" />
 	</body>
+	
 </html>

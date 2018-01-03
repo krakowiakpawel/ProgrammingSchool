@@ -11,6 +11,7 @@ public class Group {
 
 	private int id;
 	private String name;
+	private int number;
 
 	public String getName() {
 		return name;
@@ -24,6 +25,15 @@ public class Group {
 		return id;
 	}
 
+	
+	public int getNumber() {
+		return number;
+	}
+
+	public void setNumber(int number) {
+		this.number = number;
+	}
+
 	public Group(String name) {
 		this.id = 0;
 		this.name = name;
@@ -35,6 +45,8 @@ public class Group {
 
 	public Group() {
 	}
+
+	
 
 	@Override
 	public String toString() {

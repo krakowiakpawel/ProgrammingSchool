@@ -4,11 +4,17 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<title>Insert title here</title>
+		<title>Add new User</title>
 	</head>
 	<body>
 		<jsp:include page="Header.jsp" />
-		<h1>Witaj w panelu Administratora</h1>
+		<form action='ExerciseAdd' method='POST'>
+			<label> Title <input type='text' name='title'></label>
+			<br/> 
+			<label> Description <input type='text' name='description'></label>
+			<br/> 
+			<input type='submit'> <input type="reset">
+		</form>
 		<jsp:include page="Footer.jsp" />
 	</body>
 </html>
